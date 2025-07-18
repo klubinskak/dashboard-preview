@@ -7,12 +7,21 @@ import {
   IEmailData,
   IGeneralData,
   IMalwareData,
+  ISecurityEvent,
   IUserFailLoginData,
   IUsersMfaData,
 } from "@/models/models";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
-import { Bug, MailWarning, ShieldX, UserX } from "lucide-react";
+import {
+  Activity,
+  Ban,
+  Bug,
+  MailWarning,
+  Radio,
+  ShieldX,
+  UserX,
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toLabel } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +41,9 @@ const DashboardContent = () => {
   >(null);
   const [attacksByCountry, setAttacksByCountry] =
     useState<CountryDataRecord | null>(null);
+  const [systemActivity, setSystemActivity] = useState<ISecurityEvent[] | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchEmailData = async () => {
@@ -97,7 +109,21 @@ const DashboardContent = () => {
           return;
         }
         const result = await response.json();
-        setAttacksByCountry(result.countryData);
+        setAttacksByCountry(result.attackData);
+      } catch (error) {
+        console.error("Error fetching attacks by country:", error);
+      }
+    };
+
+    const fetchSecurityEvents = async () => {
+      try {
+        const response = await fetch("/api/security-events");
+        if (!response.ok) {
+          console.error("Failed to fetch security events data");
+          return;
+        }
+        const result = await response.json();
+        setSystemActivity(result.securityEvents);
       } catch (error) {
         console.error("Error fetching attacks by country:", error);
       }
@@ -109,6 +135,7 @@ const DashboardContent = () => {
     fetchUsersMfaData();
     fetchUserFailLoginData();
     fetchAttacksByCountry();
+    fetchSecurityEvents();
   }, []);
   return (
     <>
@@ -301,7 +328,12 @@ const DashboardContent = () => {
         </div>
 
         <CardPreview
-          title="Live Threat Map"
+          title={
+            <span className="flex gap-3 items-center py-2">
+              <Radio />
+              Live Threat Map
+            </span>
+          }
           cardAction={
             <div className="flex items-center space-x-2">
               <Badge
@@ -371,7 +403,12 @@ const DashboardContent = () => {
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-8">
         <CardPreview
-          title="Failed Login Attempts"
+          title={
+            <span className="flex gap-3 items-center py-2">
+              <Ban />
+              Failed Login Attempts
+            </span>
+          }
           content={
             <div className="flex flex-col justify-between gap-8 overflow-hidden">
               <p className="text-xs text-gray-500">
@@ -448,7 +485,70 @@ const DashboardContent = () => {
           }
           class="w-full"
         />
+        <CardPreview
+          title={
+            <span className="flex gap-3 items-center py-2">
+              <Activity />
+              System Activity
+            </span>
+          }
+          content={
+            <div className="h-full flex flex-col gap-3 overflow-hidden">
+              {systemActivity ? (
+                systemActivity.map((event: ISecurityEvent, index: number) => (
+                  <div
+                    className="flex flex-col justify-center h-full gap-2"
+                    key={event.id}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-4 items-center">
+                        <p>{event.title}</p>
+                        <p className="text-xs text-gray-500">
+                          {event.event_time instanceof Date
+                            ? event.event_time.toLocaleString()
+                            : event.event_time}
+                        </p>
+                      </div>
+                      {index % 2 === 0 ? (
+                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                          <span className="text-xs">Success</span>
+                        </Badge>
+                      ) : (
+                        <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
+                          <span className="text-xs">Failed</span>
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500">{event.description}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col gap-6">
+                  <Skeleton className="h-[100px] w-full rounded-xl" />
 
+                  <div className="space-y-3">
+                    {[...Array(4)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="flex justify-between items-center gap-4"
+                      >
+                        <Skeleton className="h-4 w-1/3" />
+                        <Skeleton className="h-4 w-1/4" />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Skeleton className="h-6 w-20 rounded-full" />
+                  </div>
+
+                  <Skeleton className="h-[80px] w-full rounded-xl" />
+                </div>
+              )}
+            </div>
+          }
+          class="w-full"
+        />
         <div className="grid grid-cols-1 gap-4"></div>
       </div>
     </>

@@ -1,19 +1,10 @@
-import { supabase } from "@/lib/supabaseClient";
+import { fetchUserFailLoginData } from "@/app/controllers/userInfoController";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const { data, error } = await supabase.from("user_fail_login").select("*");
-
-    if (error) {
-      console.error("Error fetching user fail login data:", error);
-      return NextResponse.json(
-        { error: "Failed to fetch user fail login data" },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ userFailLogin: data });
+     const userFailLogin = await fetchUserFailLoginData();
+     return NextResponse.json({ userFailLogin }, { status: 200 });
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json(

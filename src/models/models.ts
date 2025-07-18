@@ -40,3 +40,11 @@ export interface IAttackByCountry {
   lat: number;
   long?: number;
 }
+
+
+export interface ISecurityEvent{
+  id:number;
+  title: string;
+  event_time: Date;
+  description: string;
+}

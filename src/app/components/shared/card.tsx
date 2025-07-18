@@ -9,7 +9,7 @@ import {
 import React, { FC, ReactNode } from "react";
 
 interface CardProps {
-  title: string;
+  title: ReactNode;
   content: ReactNode;
   class: string;
   cardAction?: ReactNode;
