@@ -7,8 +7,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 
+type ChartData = {
+  [key: string]: string | number;
+  month: string;
+  failures: number;
+};
 interface ChartProps {
-  data: Array<Record<string, any>>;
+  data: ChartData[];
   config?: ChartConfig;
   title?: string;
   xAxisKey?: string;
@@ -16,12 +21,12 @@ interface ChartProps {
 }
 
 const defaultData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { month: "January", failures: 186 },
+  { month: "February", failures: 305 },
+  { month: "March", failures: 237 },
+  { month: "April", failures: 73 },
+  { month: "May", failures: 209 },
+  { month: "June", failures: 214 },
 ]
 
 const defaultConfig = {
@@ -34,7 +39,6 @@ const defaultConfig = {
 export default function Component({ 
   data = defaultData, 
   config = defaultConfig, 
-  title = "Chart",
   xAxisKey = "month",
   yAxisKey = "desktop"
 }: ChartProps) {

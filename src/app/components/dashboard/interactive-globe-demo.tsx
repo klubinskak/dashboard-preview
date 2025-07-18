@@ -88,7 +88,7 @@ const InteractiveGlobeDemo: React.FC<InteractiveGlobeDemoProps> = ({
           <span className="mr-2">{flag}</span>
         </div>
         {entries
-          .filter(([key, value]) => {
+          .filter(([key]) => {
             if (key === "id") return false;
 
             if (tooltipLabels && tooltipLabels.length > 0) {

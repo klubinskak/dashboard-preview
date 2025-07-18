@@ -1,8 +1,13 @@
-import { TriangleAlert } from "lucide-react";
 import React from "react";
 
+interface AttackData {
+  country: string;
+  day: number;
+  hour: number;
+}
+
 interface TickerProps {
-  attackData: any[];
+  attackData: AttackData[];
   totalHourlyAttacks: number;
 }
 
