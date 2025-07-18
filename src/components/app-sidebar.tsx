@@ -29,7 +29,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Activity, Command, Database, Network, Shield } from "lucide-react";
+import { Activity, Network, Shield } from "lucide-react";
 
 const data = {
   user: {
