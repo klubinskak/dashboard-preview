@@ -385,7 +385,7 @@ const DashboardContent = () => {
                   defaultValue={userFailLoginData[0].user}
                 >
                   <div className="flex justify-end mb-4">
-                    <TabsList className="flex flex-wrap cursor-pointer bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                    <TabsList className="flex cursor-pointer bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
                       {userFailLoginData.map(
                         (userFailData: IUserFailLoginData) => (
                           <TabsTrigger

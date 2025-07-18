@@ -128,7 +128,7 @@ const InteractiveGlobeDemo: React.FC<InteractiveGlobeDemoProps> = ({
       1000
     );
     camera.position.z = 4;
-
+    camera.position.z = window.innerWidth < 768 ? 6 : 4;
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
