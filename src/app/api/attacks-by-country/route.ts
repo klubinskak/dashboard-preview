@@ -17,8 +17,8 @@ export async function GET() {
     }
 
     const countryData: { [key: string]: IAttackByCountry } = data.reduce(
-      (acc: { [key: string]: IAttackByCountry }, item: any) => {
-        const countryName = item.country_name || item.country;
+      (acc: { [key: string]: IAttackByCountry }, item: IAttackByCountry) => {
+        const countryName = item.country;
 
         if (!countryName) return acc;
 
@@ -27,8 +27,8 @@ export async function GET() {
           country: countryName,
           hour: item.hour || 0,
           day: item.day || 0,
-          lat: item.latitude || item.lat || 0,
-          long: item.longitude || item.long || 0,
+          lat: item.lat || 0,
+          long:  item.long || 0,
         };
         return acc;
       },
